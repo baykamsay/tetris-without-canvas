@@ -16,7 +16,7 @@ body {
   height: 90vh;
   width: 45vh;
   margin: auto;
-  background-color: #000;
+  background-color: salmon;
   display: flex;
   flex-wrap: wrap;
 }
