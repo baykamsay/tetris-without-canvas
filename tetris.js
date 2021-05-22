@@ -115,7 +115,6 @@ function draw() {
 
 function fall() {
   player.offset.y++;
-  console.log(doesCollide());
   if (doesCollide()) {
     player.offset.y--;
     merge();
@@ -125,19 +124,15 @@ function fall() {
 }
 
 function doesCollide() {
-  player.tetromino.forEach((row, y) => {
-    row.forEach((val, x) => {
-      if (
+  return player.tetromino.some((row, y) => {
+    return row.some((val, x) => {
+      return (
         val !== 0 &&
         (board[y + player.offset.y] &&
           board[y + player.offset.y][x + player.offset.x]) !== 0
-      ) {
-        // GETS INSIDE, RETURNS, BUT DOES NOT RETURN TRUE
-        return true;
-      }
+      );
     });
   });
-  return false;
 }
 
 function merge() {
