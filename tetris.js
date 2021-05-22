@@ -106,9 +106,11 @@ function draw() {
   });
   player.tetromino.forEach((row, y) => {
     row.forEach((val, x) => {
-      boardElements[y + player.offset.y][
-        x + player.offset.x
-      ].style.backgroundColor = colors[val];
+      if (val !== 0) {
+        boardElements[y + player.offset.y][
+          x + player.offset.x
+        ].style.backgroundColor = colors[val];
+      }
     });
   });
 }
@@ -175,6 +177,78 @@ function clean() {
   });
 
   // calculate score
+}
+
+function gameOver() {
+  board.forEach((row) => row.fill(0));
+  // update score
+}
+
+// move on the x axis
+function move(displacement) {
+  player.offset.x += displacement;
+
+  if (doesCollide()) {
+    player.offset.x -= displacement;
+  }
+}
+
+document.addEventListener("keydown", (e) => {
+  switch (e.key) {
+    case "ArrowLeft":
+      move(-1);
+      break;
+    case "ArrowRight":
+      move(1);
+      break;
+    case "ArrowDown":
+      fall();
+      break;
+    case "ArrowUp":
+      rotatePlayer();
+      break;
+  }
+});
+
+function rotatePlayer() {
+  rotate(true);
+
+  if (doesCollide()) {
+    rotate(false);
+  }
+}
+
+function rotate(clockwise) {
+  for (let y = 0; y < player.tetromino.length; y++) {
+    for (let x = 0; x < y; x++) {
+      [player.tetromino[y][x], player.tetromino[x][y]] = [
+        player.tetromino[x][y],
+        player.tetromino[y][x],
+      ];
+    }
+  }
+
+  if (clockwise) {
+    for (let y = 0; y < player.tetromino.length; y++) {
+      for (let x = 0; x < Math.floor(player.tetromino.length / 2); x++) {
+        [
+          player.tetromino[y][x],
+          player.tetromino[y][player.tetromino.length - 1 - x],
+        ] = [
+          player.tetromino[y][player.tetromino.length - 1 - x],
+          player.tetromino[y][x],
+        ];
+      }
+    }
+  } else {
+    for (let y = 0; y < Math.floor(player.tetromino.length / 2); y++) {
+      [player.tetromino[y], player.tetromino[player.tetromino.length - 1 - y]] =
+        [
+          player.tetromino[player.tetromino.length - 1 - y],
+          player.tetromino[y],
+        ];
+    }
+  }
 }
 
 newPlayer();
