@@ -80,6 +80,8 @@ const player = {
   offset: { x: 0, y: 0 },
 };
 
+let score = 0;
+
 // update game logic
 let curTime = 0; // current time
 let lastTime = 0; // last time updated
@@ -159,6 +161,7 @@ function newPlayer() {
 }
 
 function clean() {
+  multiplier = 0;
   board.forEach((row, y) => {
     let full = true;
 
@@ -173,15 +176,16 @@ function clean() {
         board[i + 1] = board[i];
       }
       board[0].fill(0);
+      multiplier++;
     }
   });
 
-  // calculate score
+  updateScore(score + 10 * multiplier);
 }
 
 function gameOver() {
   board.forEach((row) => row.fill(0));
-  // update score
+  updateScore(0);
 }
 
 // move on the x axis
@@ -249,6 +253,11 @@ function rotate(clockwise) {
         ];
     }
   }
+}
+
+function updateScore(newScore) {
+  score = newScore;
+  document.getElementById("score").innerText = score;
 }
 
 newPlayer();
