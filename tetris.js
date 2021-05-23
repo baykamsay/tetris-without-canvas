@@ -81,6 +81,7 @@ const player = {
 };
 
 let score = 0;
+let paused = false;
 
 // update game logic
 let curTime = 0; // current time
@@ -88,33 +89,47 @@ let lastTime = 0; // last time updated
 let tickDuration = 800; // wait this much before updating
 
 function update(time = 0) {
-  const diff = time - lastTime;
-  curTime += diff;
+  if (!paused) {
+    const diff = time - lastTime;
+    curTime += diff;
 
-  if (curTime > tickDuration) {
-    fall();
-    curTime = 0;
+    if (curTime > tickDuration) {
+      fall();
+      curTime = 0;
+    }
+    lastTime = time;
   }
-  lastTime = time;
   draw();
   requestAnimationFrame(update);
 }
 
 function draw() {
-  board.forEach((row, y) => {
-    row.forEach((val, x) => {
-      boardElements[y][x].style.backgroundColor = colors[val];
+  if (!paused) {
+    board.forEach((row, y) => {
+      row.forEach((val, x) => {
+        boardElements[y][x].style.backgroundColor = colors[val];
+      });
     });
-  });
-  player.tetromino.forEach((row, y) => {
-    row.forEach((val, x) => {
-      if (val !== 0) {
-        boardElements[y + player.offset.y][
-          x + player.offset.x
-        ].style.backgroundColor = colors[val];
-      }
+    player.tetromino.forEach((row, y) => {
+      row.forEach((val, x) => {
+        if (val !== 0) {
+          boardElements[y + player.offset.y][
+            x + player.offset.x
+          ].style.backgroundColor = colors[val];
+        }
+      });
     });
-  });
+  } else {
+    boardElements.forEach((row, y) => {
+      row.forEach((div, x) => {
+        if ((x === 3 || x === 6) && y > 7 && y < 12) {
+          div.style.backgroundColor = "white";
+        } else {
+          div.style.backgroundColor = colors[0];
+        }
+      });
+    });
+  }
 }
 
 function fall() {
@@ -200,20 +215,32 @@ function move(displacement) {
 }
 
 document.addEventListener("keydown", (e) => {
-  switch (e.key) {
-    case "ArrowLeft":
-      move(-1);
-      break;
-    case "ArrowRight":
-      move(1);
-      break;
-    case "ArrowDown":
-      fall();
-      updateScore(score + 1);
-      break;
-    case "ArrowUp":
-      rotatePlayer();
-      break;
+  const key = e.key;
+
+  if (paused) {
+    if (key === " " || key === "Escape") {
+      paused = false;
+    }
+  } else {
+    switch (key) {
+      case " ":
+      case "Escape":
+        paused = true;
+        break;
+      case "ArrowLeft":
+        move(-1);
+        break;
+      case "ArrowRight":
+        move(1);
+        break;
+      case "ArrowDown":
+        fall();
+        updateScore(score + 1);
+        break;
+      case "ArrowUp":
+        rotatePlayer();
+        break;
+    }
   }
 });
 
