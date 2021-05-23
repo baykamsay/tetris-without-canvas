@@ -14,6 +14,12 @@ for (let i = 0; i < height; i++) {
   for (let j = 0; j < width; j++) {
     let div = document.createElement("div");
     div.classList.add("square");
+    if (j === 0) {
+      div.classList.add("left");
+    }
+    if (i === 0) {
+      div.classList.add("top");
+    }
     boardElements[i][j] = div;
     boardDiv.appendChild(div);
     board[i][j] = 0;
