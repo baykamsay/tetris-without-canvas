@@ -2,7 +2,7 @@
 
 A JavaScript Tetris implementation without using canvas.
 
-### [tetris.baykam.me](http://tetris.baykam.me)
+### [tetris.baykam.me](https://tetris.baykam.me)
 
 ## How to play
 
