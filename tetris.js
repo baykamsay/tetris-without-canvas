@@ -151,8 +151,10 @@ function merge() {
 
 // give player a new tetromino
 function newPlayer() {
-  player.tetromino = tetrominos[Math.floor(Math.random() * tetrominos.length)];
-  player.offset.x = 3;
+  player.tetromino = tetrominos[
+    Math.floor(Math.random() * tetrominos.length)
+  ].map((row) => row.slice());
+  player.offset.x = player.tetromino.length === 2 ? 4 : 3;
   player.offset.y = 0;
 
   if (doesCollide()) {
