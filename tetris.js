@@ -182,7 +182,7 @@ function clean() {
     }
   });
 
-  updateScore(score + 10 * multiplier);
+  updateScore(score + 100 * multiplier);
 }
 
 function gameOver() {
@@ -209,6 +209,7 @@ document.addEventListener("keydown", (e) => {
       break;
     case "ArrowDown":
       fall();
+      updateScore(score + 1);
       break;
     case "ArrowUp":
       rotatePlayer();
